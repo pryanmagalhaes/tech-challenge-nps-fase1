@@ -1,0 +1,7 @@
+regra,descricao,registros,%_base,tipo
+dq_delay_gt_delivery_time,Dias de atraso maiores que o prazo total de entrega,121,4.8,consistencia
+dq_discount_gt_order_value,Desconto maior que o valor do pedido,35,1.4,consistencia
+dq_resolution_without_contact,Tempo de resolução > 0 sem nenhum contato com o atendimento,511,20.4,consistencia
+dq_complaints_gt_contacts,Mais reclamações do que contatos com o atendimento,2428,97.1,consistencia
+dq_csat_zero,CSAT interno exatamente 0 (possível valor padrão / ausente),462,18.5,consistencia
+dq_duplicated_order,order_id duplicado,0,0.0,consistencia

@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NPS: o que explica a satisfação dos nossos clientes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F4F6; --card:#FFFFFF; --ink:#18212C; --muted:#5E6875; --quiet:#C8CED6; --rule:#D9DEE4;
+  --det:#B3261E; --det-deep:#6E1712; --neu:#C98A0B; --pro:#1F7A6D; --accent:#2F5DA8; --on-color:#FFFFFF;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#10161D; --card:#18202A; --ink:#E8ECF0; --muted:#9AA4B1; --quiet:#3A4552; --rule:#2B3540;
+    --det:#E0574C; --det-deep:#9E2A22; --neu:#E3A834; --pro:#3BA392; --accent:#7EA2E0; --on-color:#0E1318;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#10161D; --card:#18202A; --ink:#E8ECF0; --muted:#9AA4B1; --quiet:#3A4552; --rule:#2B3540;
+  --det:#E0574C; --det-deep:#9E2A22; --neu:#E3A834; --pro:#3BA392; --accent:#7EA2E0; --on-color:#0E1318;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--paper);color:var(--ink);overflow:hidden}
+body{font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.stage{position:fixed;inset:0;display:grid;place-items:center}
+.deck{width:1600px;height:900px;position:relative;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;padding:72px 120px 90px;display:none;flex-direction:column;gap:26px;background:var(--paper)}
+.slide.active{display:flex}
+.slide footer{position:absolute;left:120px;right:120px;bottom:36px;display:flex;justify-content:space-between;
+  font-size:17px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px}
+h1,h2{font-stretch:78%;letter-spacing:-0.01em;color:var(--ink)}
+h2{font-size:54px;line-height:1.06;font-weight:700;max-width:1300px}
+.display{font-size:104px;line-height:.98;font-weight:800;font-stretch:72%;letter-spacing:-0.015em}
+.lead{font-size:32px;line-height:1.35;color:var(--muted);max-width:980px}
+.kicker{font-size:22px;color:var(--muted)}
+.body{font-size:24px;line-height:1.45;color:var(--muted);max-width:900px}
+.body b{color:var(--ink)}
+.caveat{font-size:18px;line-height:1.45;color:var(--muted);border-left:3px solid var(--neu);padding-left:14px;max-width:880px}
+.foot-note{font-size:20px;line-height:1.45;color:var(--muted);max-width:1300px}
+svg text{font-family:inherit}
+svg .lbl{font-size:24px;fill:var(--muted)} svg .lbl.strong{fill:var(--ink);font-weight:600}
+svg .val{font-size:28px;font-weight:700;fill:var(--ink)} svg .val-sm{font-size:22px;font-weight:600;fill:var(--ink)}
+svg .val-sm.muted, svg .muted{fill:var(--muted);font-weight:400}
+svg .tick{font-size:19px;fill:var(--muted)} svg .tiny{font-size:16px}
+svg .on-color{fill:var(--on-color);font-weight:700} svg .ink{fill:var(--ink);font-weight:700}
+svg .big{font-size:40px} svg .mid{font-size:26px}
+svg .grid{stroke:var(--rule);stroke-width:1} svg .axis{stroke:var(--quiet);stroke-width:2}
+svg .bar-key{fill:var(--det)} svg .bar-off{fill:var(--quiet)}
+svg .rupture{stroke:var(--ink);stroke-width:2.5;stroke-dasharray:8 7}
+svg .range-key{stroke:var(--det);stroke-width:8;stroke-linecap:round} svg .range-key-dot{fill:var(--det)}
+svg .range-off{stroke:var(--quiet);stroke-width:8;stroke-linecap:round} svg .range-off-dot{fill:var(--muted)}
+/* capa */
+.cover-slide{justify-content:center}
+.cover{display:flex;flex-direction:column;gap:30px}
+.scale-wrap{position:relative;max-width:1100px;margin-top:20px;padding-bottom:64px}
+.scale{display:grid;grid-template-columns:repeat(11,1fr);gap:6px}
+.marker{position:absolute;top:-10px;bottom:30px;border-left:4px solid var(--ink)}
+.marker span{position:absolute;bottom:-34px;left:-2px;white-space:nowrap;font-size:22px;font-weight:700}
+.scale .s{height:64px;display:grid;place-items:center;font-size:24px;font-weight:700;color:var(--on-color);background:var(--det)}
+.scale .s7,.scale .s8{background:var(--neu)} .scale .s9,.scale .s10{background:var(--pro)}
+/* contexto */
+.journey{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:30px;position:relative}
+.journey .step{padding:26px 26px 26px 0;border-top:6px solid var(--quiet);display:flex;flex-direction:column;gap:8px}
+.journey .step b{font-size:30px;font-stretch:85%} .journey .step span{font-size:21px;color:var(--muted)}
+.journey .survey{border-top-color:var(--det)} .journey .survey b{color:var(--det)}
+.cols-2{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.cols-3{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
+.notes p{font-size:23px;line-height:1.45;color:var(--muted)} .notes b{color:var(--ink)}
+.notes.tight p{font-size:21px}
+.question{display:flex;flex-direction:column;gap:40px;justify-content:center;height:100%}
+.q-label{font-size:24px;color:var(--muted)}
+.q{font-size:66px;line-height:1.1;font-weight:700;font-stretch:78%;max-width:1320px;border-left:10px solid var(--accent);padding-left:40px}
+/* panorama */
+.hero-num{display:flex;align-items:flex-end;gap:56px}
+.hero-num>div{display:flex;flex-direction:column}
+.mega{font-size:190px;line-height:.85;font-weight:800;font-stretch:70%;letter-spacing:-0.03em}
+.mega-label{font-size:22px;color:var(--muted);margin-top:10px}
+.hero-num h2{font-size:48px;max-width:860px;padding-bottom:12px}
+.det-text{color:var(--det)}
+.stats .num{display:block;font-size:56px;font-weight:800;font-stretch:75%;color:var(--ink);line-height:1;margin-bottom:8px}
+.stats p{font-size:21px;color:var(--muted);line-height:1.4}
+/* layout geral */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;height:100%}
+.split.wide-right{grid-template-columns:.8fr 1.2fr}
+.split>div{display:flex;flex-direction:column;gap:22px}
+.split h2{font-size:52px}
+figure{display:flex;flex-direction:column;gap:10px} figcaption{font-size:22px;color:var(--muted)}
+figcaption b{color:var(--ink)}
+.axis-title{font-size:20px;color:var(--muted)} .axis-title.right{padding-left:170px}
+.legend{display:flex;flex-wrap:wrap;gap:30px;font-size:20px;color:var(--muted)}
+.legend .k{display:inline-flex;align-items:center;gap:10px}
+.legend .k::before{content:"";width:18px;height:18px;display:inline-block;background:var(--quiet)}
+.legend .det::before{background:var(--det)} .legend .neu::before{background:var(--neu)} .legend .pro::before{background:var(--pro)}
+.legend .rup::before{background:none;border-left:3px dashed var(--ink);width:3px}
+.legend .c0::before{background:var(--det-deep)} .legend .c1::before{background:var(--det)}
+.legend .c2::before{background:var(--neu)} .legend .c3::before{background:var(--quiet)}
+.triggers{margin:6px 0 10px}
+.trigger{display:flex;align-items:baseline;gap:22px;border-top:6px solid var(--det);padding-top:18px}
+.trigger .num{font-size:88px;font-weight:800;font-stretch:72%;line-height:1}
+.trigger span:last-child{font-size:28px;color:var(--ink)}
+/* ações */
+.actions{list-style:none;counter-reset:a;display:flex;flex-direction:column;gap:0}
+.actions li{counter-increment:a;display:grid;grid-template-columns:70px 1.05fr 1.6fr .8fr;gap:24px;align-items:baseline;
+  padding:18px 0;border-top:1px solid var(--rule)}
+.actions li:last-child{border-bottom:1px solid var(--rule)}
+.actions li::before{content:counter(a);font-size:44px;font-weight:800;font-stretch:72%;color:var(--accent);line-height:1}
+.actions b{font-size:27px;font-stretch:88%} .actions span{font-size:22px;color:var(--muted);line-height:1.4}
+.actions em{font-style:normal;font-size:19px;color:var(--muted);text-align:right}
+.limits{row-gap:28px} .limits p{font-size:23px;line-height:1.45;color:var(--muted)} .limits b{color:var(--ink);display:block;font-size:26px;margin-bottom:4px}
+.timeline{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:36px;margin-top:20px}
+.timeline li{border-top:6px solid var(--accent);padding-top:22px;display:flex;flex-direction:column;gap:12px}
+.timeline li:last-child{border-top-color:var(--pro)}
+.timeline b{font-size:28px;font-stretch:85%} .timeline span{font-size:22px;color:var(--muted);line-height:1.45}
+.closing{margin-top:auto;font-size:40px;font-weight:700;font-stretch:80%;line-height:1.15;max-width:1200px;margin-bottom:40px}
+/* navegação */
+.progress{position:fixed;left:0;top:0;height:4px;background:var(--accent);transition:width .25s ease;z-index:5}
+.nav{position:fixed;right:16px;top:14px;display:flex;gap:8px;z-index:5;opacity:.35;transition:opacity .2s}
+.nav:hover,.nav:focus-within{opacity:1}
+.nav button{font:inherit;font-size:15px;background:var(--card);color:var(--ink);border:1px solid var(--rule);
+  padding:8px 14px;cursor:pointer;border-radius:4px}
+.nav button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.hint{position:fixed;left:16px;top:16px;font-size:13px;color:var(--muted);z-index:5;opacity:.6}
+@media (prefers-reduced-motion: reduce){.progress{transition:none}}
+@media print{
+  @page{size:1600px 900px;margin:0}
+  html,body{overflow:visible;height:auto}
+  .stage{position:static;display:block}
+  .deck{transform:none!important;width:1600px;height:auto}
+  .slide{display:flex!important;position:relative;width:1600px;height:900px;page-break-after:always;break-after:page}
+  .progress,.nav,.hint{display:none}
+}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+<div class="stage"><main class="deck"><section class="slide cover-slide" aria-label="Slide 1 de 16: Abertura">
+<div class="cover">
+  <p class="kicker">Tech Challenge Fase 1, case NPS Preditivo</p>
+  <h1 class="display">O cliente aceita esperar.<br>Não aceita ser surpreendido.</h1>
+  <p class="lead">O que explica a satisfação dos nossos clientes e onde agir antes da pesquisa de NPS.</p>
+  <div class="scale-wrap" aria-hidden="true">
+    <div class="scale"><span class="s s0">0</span><span class="s s1">1</span><span class="s s2">2</span><span class="s s3">3</span><span class="s s4">4</span><span class="s s5">5</span><span class="s s6">6</span><span class="s s7">7</span><span class="s s8">8</span><span class="s s9">9</span><span class="s s10">10</span></div>
+    <div class="marker" style="left:44.35%"><span>Nota média hoje: 4,4</span></div>
+  </div>
+  <p class="foot-note">Análise de 2.500 pedidos com resposta de NPS</p>
+</div><footer><span>Abertura</span><span>1 / 16</span></footer></section><section class="slide " aria-label="Slide 2 de 16: Contexto">
+<h2>Crescemos em volume. A satisfação ficou imprevisível, e só a descobrimos quando já é tarde.</h2>
+<div class="journey">
+  <div class="step"><b>Compra</b><span>valor, itens, parcelas</span></div>
+  <div class="step"><b>Entrega</b><span>prazo, atraso, frete</span></div>
+  <div class="step"><b>Atendimento</b><span>contatos, reclamações</span></div>
+  <div class="step survey"><b>Pesquisa NPS</b><span>hoje, só aqui sabemos se deu certo</span></div>
+</div>
+<div class="cols-3 notes">
+  <p><b>O sintoma.</b> Clientes com operações parecidas terminam como promotores ou detratores, sem explicação clara.</p>
+  <p><b>O problema.</b> A nota chega depois da jornada: a gestão é reativa e não sabe onde priorizar.</p>
+  <p><b>A oportunidade.</b> Tudo o que acontece antes da pesquisa já está nos nossos sistemas. Basta saber ler.</p>
+</div><footer><span>Contexto</span><span>2 / 16</span></footer></section><section class="slide " aria-label="Slide 3 de 16: Pergunta">
+<div class="question">
+  <p class="q-label">A pergunta que guiou a análise</p>
+  <p class="q">Quais fatores da operação realmente explicam a satisfação do cliente, e em que ponto da jornada devemos agir antes da pesquisa?</p>
+  <div class="cols-3 notes">
+    <p><b>Entender</b> o que diferencia promotores de detratores.</p>
+    <p><b>Localizar</b> o ponto em que a experiência se rompe.</p>
+    <p><b>Priorizar</b> ações que a operação consegue executar.</p>
+  </div>
+</div><footer><span>Pergunta</span><span>3 / 16</span></footer></section><section class="slide " aria-label="Slide 4 de 16: Onde estamos">
+<div class="hero-num">
+  <div><span class="mega det-text">−80</span><span class="mega-label">NPS atual</span></div>
+  <h2>De cada 100 clientes, 84 são detratores e só 4 são promotores.</h2>
+</div>
+<svg viewBox="0 0 1360 172" width="100%" role="img" aria-label="Distribuição de detratores, neutros e promotores" xmlns="http://www.w3.org/2000/svg"><rect x="0.0" y="0" width="1144.3" height="90" fill="var(--det)"/><text x="16.0" y="58" class="on-color mid">84%</text><text x="0.0" y="126" class="lbl">Detratores</text><rect x="1147.3" y="0" width="149.9" height="90" fill="var(--neu)"/><text x="1163.3" y="58" class="on-color mid">11%</text><text x="1147.3" y="126" class="lbl">Neutros</text><rect x="1300.2" y="0" width="56.8" height="90" fill="var(--pro)"/><text x="1328.6" y="56" class="on-color" font-size="22" text-anchor="middle">4%</text><text x="1360.0" y="160" class="lbl" text-anchor="end">Promotores</text></svg>
+<div class="cols-3 stats">
+  <p><span class="num">89%</span>dos pedidos chegam atrasados</p>
+  <p><span class="num">4,4</span>nota média, de 0 a 10</p>
+  <p><span class="num">4%</span>dos pedidos têm atraso de até 1 dia e no máximo 1 reclamação</p>
+</div><footer><span>Onde estamos</span><span>4 / 16</span></footer></section><section class="slide " aria-label="Slide 5 de 16: Por que importa">
+<div class="split">
+  <div>
+    <h2>Detrator não volta. Cada ponto de NPS é recompra em jogo.</h2>
+    <p class="body">Taxa de recompra em até 30 dias, por categoria de NPS.</p>
+    <p class="body">Promotores recompram e indicam a marca, com custo de aquisição próximo de zero. Detratores migram para o concorrente e falam sobre isso em público.</p>
+    <p class="caveat">Os percentuais exatos parecem resultado de uma regra da base (0% e 100% são perfeitos demais). Leia a direção, não a magnitude.</p>
+  </div>
+  <div><svg viewBox="0 0 620 420" width="100%" role="img" aria-label="Taxa de recompra por categoria" xmlns="http://www.w3.org/2000/svg"><rect x="40" y="347.0" width="130" height="3.0" fill="var(--det)"/><text x="105.0" y="333.0" class="val" text-anchor="middle">0%</text><text x="105.0" y="388" class="lbl" text-anchor="middle">Detratores</text><rect x="230" y="230.9" width="130" height="119.1" fill="var(--neu)"/><text x="295.0" y="216.9" class="val" text-anchor="middle">38%</text><text x="295.0" y="388" class="lbl" text-anchor="middle">Neutros</text><rect x="420" y="40.0" width="130" height="310.0" fill="var(--pro)"/><text x="485.0" y="26.0" class="val" text-anchor="middle">100%</text><text x="485.0" y="388" class="lbl" text-anchor="middle">Promotores</text><line x1="20" x2="600" y1="350" y2="350" class="axis"/></svg></div>
+</div><footer><span>Por que importa</span><span>5 / 16</span></footer></section><section class="slide " aria-label="Slide 6 de 16: O que pesa">
+<h2>Quatro fatores concentram toda a relação com a nota. Todos são operacionais.</h2>
+<p class="body">Força da relação de cada fator com a nota do cliente (0 a 100).</p>
+<svg viewBox="0 0 1360 520" width="100%" role="img" aria-label="Força da relação de cada fator com a nota" xmlns="http://www.w3.org/2000/svg"><text x="310" y="24.8" class="lbl strong" text-anchor="end">Dias de atraso</text><rect x="330" y="7.2" width="830.5" height="25.6" class="bar-key"/><text x="1172.5" y="24.8" class="val-sm strong">59</text><text x="310" y="64.8" class="lbl strong" text-anchor="end">Reclamações</text><rect x="330" y="47.2" width="694.5" height="25.6" class="bar-key"/><text x="1036.5" y="64.8" class="val-sm strong">49</text><text x="310" y="104.8" class="lbl strong" text-anchor="end">Contatos com atendimento</text><rect x="330" y="87.2" width="476.5" height="25.6" class="bar-key"/><text x="818.5" y="104.8" class="val-sm strong">34</text><text x="310" y="144.8" class="lbl strong" text-anchor="end">Tempo de resolução</text><rect x="330" y="127.2" width="269.6" height="25.6" class="bar-key"/><text x="611.6" y="144.8" class="val-sm strong">19</text><text x="310" y="184.8" class="lbl" text-anchor="end">Valor do frete</text><rect x="330" y="167.2" width="56.0" height="25.6" class="bar-off"/><text x="398.0" y="184.8" class="val-sm muted">≈ 0</text><text x="310" y="224.8" class="lbl" text-anchor="end">Valor do pedido</text><rect x="330" y="207.2" width="50.8" height="25.6" class="bar-off"/><text x="392.8" y="224.8" class="val-sm muted">≈ 0</text><text x="310" y="264.8" class="lbl" text-anchor="end">Nº de parcelas</text><rect x="330" y="247.2" width="37.8" height="25.6" class="bar-off"/><text x="379.8" y="264.8" class="val-sm muted">≈ 0</text><text x="310" y="304.8" class="lbl" text-anchor="end">Tentativas de entrega</text><rect x="330" y="287.2" width="37.2" height="25.6" class="bar-off"/><text x="379.2" y="304.8" class="val-sm muted">≈ 0</text><text x="310" y="344.8" class="lbl" text-anchor="end">Tempo de casa (meses)</text><rect x="330" y="327.2" width="16.5" height="25.6" class="bar-off"/><text x="358.5" y="344.8" class="val-sm muted">≈ 0</text><text x="310" y="384.8" class="lbl" text-anchor="end">Desconto</text><rect x="330" y="367.2" width="16.4" height="25.6" class="bar-off"/><text x="358.4" y="384.8" class="val-sm muted">≈ 0</text><text x="310" y="424.8" class="lbl" text-anchor="end">Idade do cliente</text><rect x="330" y="407.2" width="10.5" height="25.6" class="bar-off"/><text x="352.5" y="424.8" class="val-sm muted">≈ 0</text><text x="310" y="464.8" class="lbl" text-anchor="end">Qtd. de itens</text><rect x="330" y="447.2" width="8.8" height="25.6" class="bar-off"/><text x="350.8" y="464.8" class="val-sm muted">≈ 0</text><text x="310" y="504.8" class="lbl" text-anchor="end">Prazo total de entrega</text><rect x="330" y="487.2" width="3.0" height="25.6" class="bar-off"/><text x="345.0" y="504.8" class="val-sm muted">≈ 0</text></svg>
+<p class="foot-note">Juntos, os fatores operacionais explicam 56% da variação da nota. Perfil do cliente e condições comerciais ficam perto de zero.</p><footer><span>O que pesa</span><span>6 / 16</span></footer></section><section class="slide " aria-label="Slide 7 de 16: Insight 1">
+<h2>O prazo total não muda a nota. O atraso derruba.</h2>
+<div class="cols-2">
+  <figure><figcaption><b>Prazo total de entrega</b> (2 a 14 dias)</figcaption>
+    <svg viewBox="0 0 640 380" width="100%" role="img" aria-label="Nota média por prazo total" xmlns="http://www.w3.org/2000/svg"><line x1="50" x2="620" y1="320.0" y2="320.0" class="grid"/><text x="38" y="326.0" class="tick" text-anchor="end">0</text><line x1="50" x2="620" y1="247.5" y2="247.5" class="grid"/><text x="38" y="253.5" class="tick" text-anchor="end">2</text><line x1="50" x2="620" y1="175.0" y2="175.0" class="grid"/><text x="38" y="181.0" class="tick" text-anchor="end">4</text><line x1="50" x2="620" y1="102.5" y2="102.5" class="grid"/><text x="38" y="108.5" class="tick" text-anchor="end">6</text><line x1="50" x2="620" y1="30.0" y2="30.0" class="grid"/><text x="38" y="36.0" class="tick" text-anchor="end">8</text><polyline points="50.0,162.6 97.5,166.3 145.0,161.9 192.5,163.2 240.0,158.2 287.5,152.7 335.0,161.2 382.5,163.6 430.0,149.8 477.5,168.2 525.0,167.2 572.5,151.3 620.0,168.1" fill="none" stroke="var(--muted)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="50.0" cy="162.6" r="6" fill="var(--muted)"/><circle cx="97.5" cy="166.3" r="6" fill="var(--muted)"/><circle cx="145.0" cy="161.9" r="6" fill="var(--muted)"/><circle cx="192.5" cy="163.2" r="6" fill="var(--muted)"/><circle cx="240.0" cy="158.2" r="6" fill="var(--muted)"/><circle cx="287.5" cy="152.7" r="6" fill="var(--muted)"/><circle cx="335.0" cy="161.2" r="6" fill="var(--muted)"/><circle cx="382.5" cy="163.6" r="6" fill="var(--muted)"/><circle cx="430.0" cy="149.8" r="6" fill="var(--muted)"/><circle cx="477.5" cy="168.2" r="6" fill="var(--muted)"/><circle cx="525.0" cy="167.2" r="6" fill="var(--muted)"/><circle cx="572.5" cy="151.3" r="6" fill="var(--muted)"/><circle cx="620.0" cy="168.1" r="6" fill="var(--muted)"/><text x="50.0" y="146.6" class="val-sm" text-anchor="start">4,3</text><text x="620.0" y="152.1" class="val-sm" text-anchor="end">4,2</text><text x="50.0" y="350" class="tick" text-anchor="middle">2</text><text x="97.5" y="350" class="tick" text-anchor="middle">3</text><text x="145.0" y="350" class="tick" text-anchor="middle">4</text><text x="192.5" y="350" class="tick" text-anchor="middle">5</text><text x="240.0" y="350" class="tick" text-anchor="middle">6</text><text x="287.5" y="350" class="tick" text-anchor="middle">7</text><text x="335.0" y="350" class="tick" text-anchor="middle">8</text><text x="382.5" y="350" class="tick" text-anchor="middle">9</text><text x="430.0" y="350" class="tick" text-anchor="middle">10</text><text x="477.5" y="350" class="tick" text-anchor="middle">11</text><text x="525.0" y="350" class="tick" text-anchor="middle">12</text><text x="572.5" y="350" class="tick" text-anchor="middle">13</text><text x="620.0" y="350" class="tick" text-anchor="middle">14</text></svg>
+    <p class="body">Entregar em 14 dias, como prometido, gera a mesma nota que entregar em 2.</p></figure>
+  <figure><figcaption><b>Dias de atraso</b> além do prometido</figcaption>
+    <svg viewBox="0 0 640 380" width="100%" role="img" aria-label="Nota média por dias de atraso" xmlns="http://www.w3.org/2000/svg"><line x1="50" x2="620" y1="320.0" y2="320.0" class="grid"/><text x="38" y="326.0" class="tick" text-anchor="end">0</text><line x1="50" x2="620" y1="247.5" y2="247.5" class="grid"/><text x="38" y="253.5" class="tick" text-anchor="end">2</text><line x1="50" x2="620" y1="175.0" y2="175.0" class="grid"/><text x="38" y="181.0" class="tick" text-anchor="end">4</text><line x1="50" x2="620" y1="102.5" y2="102.5" class="grid"/><text x="38" y="108.5" class="tick" text-anchor="end">6</text><line x1="50" x2="620" y1="30.0" y2="30.0" class="grid"/><text x="38" y="36.0" class="tick" text-anchor="end">8</text><polyline points="50.0,71.4 131.4,119.0 212.9,154.0 294.3,195.4 375.7,231.4 457.1,266.3 538.6,280.2 620.0,309.4" fill="none" stroke="var(--det)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="50.0" cy="71.4" r="6" fill="var(--det)"/><circle cx="131.4" cy="119.0" r="6" fill="var(--det)"/><circle cx="212.9" cy="154.0" r="6" fill="var(--det)"/><circle cx="294.3" cy="195.4" r="6" fill="var(--det)"/><circle cx="375.7" cy="231.4" r="6" fill="var(--det)"/><circle cx="457.1" cy="266.3" r="6" fill="var(--det)"/><circle cx="538.6" cy="280.2" r="6" fill="var(--det)"/><circle cx="620.0" cy="309.4" r="6" fill="var(--det)"/><text x="50.0" y="55.4" class="val-sm" text-anchor="start">6,9</text><text x="620.0" y="293.4" class="val-sm" text-anchor="end">0,3</text><text x="50.0" y="350" class="tick" text-anchor="middle">0</text><text x="131.4" y="350" class="tick" text-anchor="middle">1</text><text x="212.9" y="350" class="tick" text-anchor="middle">2</text><text x="294.3" y="350" class="tick" text-anchor="middle">3</text><text x="375.7" y="350" class="tick" text-anchor="middle">4</text><text x="457.1" y="350" class="tick" text-anchor="middle">5</text><text x="538.6" y="350" class="tick" text-anchor="middle">6</text><text x="620.0" y="350" class="tick" text-anchor="middle">7</text></svg>
+    <p class="body">Cada dia além do combinado tira cerca de <b>1 ponto</b> da nota.</p></figure>
+</div><footer><span>Insight 1</span><span>7 / 16</span></footer></section><section class="slide " aria-label="Slide 8 de 16: Ponto de ruptura">
+<h2>O primeiro dia de atraso custa metade de toda a queda. No terceiro, a relação está perdida.</h2>
+<svg viewBox="0 0 1360 560" width="100%" role="img" aria-label="Categorias de NPS por faixa de atraso" xmlns="http://www.w3.org/2000/svg"><rect x="40.0" y="263.5" width="200" height="206.5" fill="var(--det)"/><text x="140.0" y="375.8" class="on-color mid" text-anchor="middle">52%</text><rect x="40.0" y="142.2" width="200" height="121.3" fill="var(--neu)"/><text x="140.0" y="211.9" class="on-color mid" text-anchor="middle">30%</text><rect x="40.0" y="70.0" width="200" height="72.2" fill="var(--pro)"/><text x="140.0" y="115.1" class="on-color mid" text-anchor="middle">18%</text><text x="140.0" y="48" class="val" text-anchor="middle">NPS −34</text><text x="140.0" y="510" class="lbl strong" text-anchor="middle">No prazo</text><text x="140.0" y="542" class="tick" text-anchor="middle">11% dos pedidos</text><rect x="310.0" y="174.1" width="200" height="295.9" fill="var(--det)"/><text x="410.0" y="331.0" class="on-color mid" text-anchor="middle">74%</text><rect x="310.0" y="98.6" width="200" height="75.4" fill="var(--neu)"/><text x="410.0" y="145.3" class="on-color mid" text-anchor="middle">19%</text><rect x="310.0" y="70.0" width="200" height="28.6" fill="var(--pro)"/><text x="410.0" y="93.3" class="on-color mid" text-anchor="middle">7%</text><text x="410.0" y="48" class="val" text-anchor="middle">NPS −67</text><text x="410.0" y="510" class="lbl strong" text-anchor="middle">1 dia</text><text x="410.0" y="542" class="tick" text-anchor="middle">25% dos pedidos</text><rect x="580.0" y="118.3" width="200" height="351.7" fill="var(--det)"/><text x="680.0" y="303.1" class="on-color mid" text-anchor="middle">88%</text><rect x="580.0" y="78.0" width="200" height="40.2" fill="var(--neu)"/><text x="680.0" y="107.2" class="on-color mid" text-anchor="middle">10%</text><rect x="580.0" y="70.0" width="200" height="8.0" fill="var(--pro)"/><text x="680.0" y="48" class="val" text-anchor="middle">NPS −86</text><text x="680.0" y="510" class="lbl strong" text-anchor="middle">2 dias</text><text x="680.0" y="542" class="tick" text-anchor="middle">26% dos pedidos</text><rect x="850.0" y="83.0" width="200" height="387.0" fill="var(--det)"/><text x="950.0" y="285.5" class="on-color mid" text-anchor="middle">97%</text><rect x="850.0" y="72.3" width="200" height="10.7" fill="var(--neu)"/><rect x="850.0" y="70.0" width="200" height="2.3" fill="var(--pro)"/><text x="950.0" y="48" class="val" text-anchor="middle">NPS −96</text><text x="950.0" y="510" class="lbl strong" text-anchor="middle">3 dias</text><text x="950.0" y="542" class="tick" text-anchor="middle">21% dos pedidos</text><rect x="1120.0" y="71.8" width="200" height="398.2" fill="var(--det)"/><text x="1220.0" y="279.9" class="on-color mid" text-anchor="middle">100%</text><rect x="1120.0" y="70.0" width="200" height="1.8" fill="var(--neu)"/><text x="1220.0" y="48" class="val" text-anchor="middle">NPS −100</text><text x="1220.0" y="510" class="lbl strong" text-anchor="middle">4+ dias</text><text x="1220.0" y="542" class="tick" text-anchor="middle">18% dos pedidos</text><line x1="815.0" x2="815.0" y1="20" y2="476" class="rupture"/></svg>
+<div class="legend"><span class="k det">Detrator</span><span class="k neu">Neutro</span><span class="k pro">Promotor</span>
+<span class="k rup">Ponto de ruptura: a partir de 3 dias, 98% são detratores e não há promotores</span></div><footer><span>Ponto de ruptura</span><span>8 / 16</span></footer></section><section class="slide " aria-label="Slide 9 de 16: Insight 2">
+<h2>Cada vez que o cliente precisa nos procurar, a nota cai.</h2>
+<p class="body">% de detratores em cada situação de atendimento.</p>
+<div class="cols-3">
+  <figure><figcaption><b>Contatos</b> com o atendimento</figcaption><svg viewBox="0 0 420 400" width="100%" role="img" aria-label="Contatos" xmlns="http://www.w3.org/2000/svg"><rect x="20.0" y="128.8" width="73.0" height="191.2" fill="var(--det)" opacity="0.84"/><text x="56.5" y="116.8" class="val-sm" text-anchor="middle">71%</text><text x="56.5" y="356" class="tick" text-anchor="middle">0</text><rect x="115.0" y="93.5" width="73.0" height="226.5" fill="var(--det)" opacity="0.91"/><text x="151.5" y="81.5" class="val-sm" text-anchor="middle">84%</text><text x="151.5" y="356" class="tick" text-anchor="middle">1</text><rect x="210.0" y="80.8" width="73.0" height="239.2" fill="var(--det)" opacity="0.94"/><text x="246.5" y="68.8" class="val-sm" text-anchor="middle">89%</text><text x="246.5" y="356" class="tick" text-anchor="middle">2</text><rect x="305.0" y="63.8" width="73.0" height="256.2" fill="var(--det)" opacity="0.97"/><text x="341.5" y="51.8" class="val-sm" text-anchor="middle">95%</text><text x="341.5" y="356" class="tick" text-anchor="middle">3+</text><line x1="10" x2="410" y1="320" y2="320" class="axis"/></svg></figure>
+  <figure><figcaption><b>Reclamações</b> registradas</figcaption><svg viewBox="0 0 420 400" width="100%" role="img" aria-label="Reclamações" xmlns="http://www.w3.org/2000/svg"><rect x="20.0" y="243.6" width="73.0" height="76.4" fill="var(--det)" opacity="0.61"/><text x="56.5" y="231.6" class="val-sm" text-anchor="middle">28%</text><text x="56.5" y="356" class="tick" text-anchor="middle">0–1</text><rect x="115.0" y="115.1" width="73.0" height="204.9" fill="var(--det)" opacity="0.87"/><text x="151.5" y="103.1" class="val-sm" text-anchor="middle">76%</text><text x="151.5" y="356" class="tick" text-anchor="middle">2–3</text><rect x="210.0" y="71.9" width="73.0" height="248.1" fill="var(--det)" opacity="0.96"/><text x="246.5" y="59.9" class="val-sm" text-anchor="middle">92%</text><text x="246.5" y="356" class="tick" text-anchor="middle">4–5</text><rect x="305.0" y="56.8" width="73.0" height="263.2" fill="var(--det)" opacity="0.99"/><text x="341.5" y="44.8" class="val-sm" text-anchor="middle">98%</text><text x="341.5" y="356" class="tick" text-anchor="middle">6+</text><line x1="10" x2="410" y1="320" y2="320" class="axis"/></svg></figure>
+  <figure><figcaption><b>Tempo</b> até resolver</figcaption><svg viewBox="0 0 420 400" width="100%" role="img" aria-label="Resolução" xmlns="http://www.w3.org/2000/svg"><rect x="20.0" y="110.2" width="73.0" height="209.8" fill="var(--det)" opacity="0.88"/><text x="56.5" y="98.2" class="val-sm" text-anchor="middle">78%</text><text x="56.5" y="356" class="tick" text-anchor="middle">0–2 dias</text><rect x="115.0" y="97.0" width="73.0" height="223.0" fill="var(--det)" opacity="0.90"/><text x="151.5" y="85.0" class="val-sm" text-anchor="middle">83%</text><text x="151.5" y="356" class="tick" text-anchor="middle">3–5 dias</text><rect x="210.0" y="85.6" width="73.0" height="234.4" fill="var(--det)" opacity="0.93"/><text x="246.5" y="73.6" class="val-sm" text-anchor="middle">87%</text><text x="246.5" y="356" class="tick" text-anchor="middle">6–8 dias</text><rect x="305.0" y="75.9" width="73.0" height="244.1" fill="var(--det)" opacity="0.95"/><text x="341.5" y="63.9" class="val-sm" text-anchor="middle">90%</text><text x="341.5" y="356" class="tick" text-anchor="middle">9+ dias</text><line x1="10" x2="410" y1="320" y2="320" class="axis"/></svg></figure>
+</div>
+<div class="cols-3 notes tight">
+  <p>Com 3 ou mais contatos, 95% são detratores.</p>
+  <p>A 2ª reclamação é a virada: a maioria passa a ser detratora.</p>
+  <p>Resolver rápido ajuda, mas evitar a reclamação ajuda mais.</p>
+</div><footer><span>Insight 2</span><span>9 / 16</span></footer></section><section class="slide " aria-label="Slide 10 de 16: Combinação">
+<div class="split wide-right">
+  <div>
+    <h2>Nota alta só existe quando entrega e atendimento funcionam juntos.</h2>
+    <p class="body">Nota média (0 a 10) por combinação de atraso e reclamações.</p>
+    <p class="body">No canto ideal, a nota é <b>8,1</b>. No pior, <b>1,3</b>.</p>
+    <p class="body">Hoje, só 3% dos pedidos estão no canto ideal.</p>
+    <p class="caveat">* Células com menos de 30 pedidos são apenas indicativas.</p>
+  </div>
+  <div>
+    <p class="axis-title right">Reclamações registradas</p>
+    <svg viewBox="0 0 1000 560" width="100%" role="img" aria-label="Nota média por atraso e reclamações" xmlns="http://www.w3.org/2000/svg"><text x="272.5" y="38" class="lbl strong" text-anchor="middle">0–1</text><text x="477.5" y="38" class="lbl strong" text-anchor="middle">2–3</text><text x="682.5" y="38" class="lbl strong" text-anchor="middle">4–5</text><text x="887.5" y="38" class="lbl strong" text-anchor="middle">6+</text><text x="152" y="117.0" class="lbl strong" text-anchor="end">No prazo</text><rect x="173.0" y="63.0" width="199.0" height="92.0" fill="var(--pro)" opacity="0.69"/><text x="272.5" y="115.0" class="on-color mid" text-anchor="middle">8,1</text><text x="272.5" y="141.0" class="on-color tiny" text-anchor="middle">n = 77</text><rect x="378.0" y="63.0" width="199.0" height="92.0" fill="var(--pro)" opacity="0.37"/><text x="477.5" y="115.0" class="ink mid" text-anchor="middle">7,0</text><text x="477.5" y="141.0" class="muted tiny" text-anchor="middle">n = 101</text><rect x="583.0" y="63.0" width="199.0" height="92.0" fill="var(--pro)" opacity="0.09"/><text x="682.5" y="115.0" class="ink mid" text-anchor="middle">6,0</text><text x="682.5" y="141.0" class="muted tiny" text-anchor="middle">n = 69</text><rect x="788.0" y="63.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.28"/><text x="887.5" y="115.0" class="ink mid" text-anchor="middle">4,8</text><text x="887.5" y="141.0" class="muted tiny" text-anchor="middle">n = 30</text><text x="152" y="215.0" class="lbl strong" text-anchor="end">1 dia</text><rect x="173.0" y="161.0" width="199.0" height="92.0" fill="var(--pro)" opacity="0.64"/><text x="272.5" y="213.0" class="on-color mid" text-anchor="middle">8,0</text><text x="272.5" y="239.0" class="on-color tiny" text-anchor="middle">n = 31</text><rect x="378.0" y="161.0" width="199.0" height="92.0" fill="var(--pro)" opacity="0.24"/><text x="477.5" y="213.0" class="ink mid" text-anchor="middle">6,6</text><text x="477.5" y="239.0" class="muted tiny" text-anchor="middle">n = 218</text><rect x="583.0" y="161.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.24"/><text x="682.5" y="213.0" class="ink mid" text-anchor="middle">5,1</text><text x="682.5" y="239.0" class="muted tiny" text-anchor="middle">n = 231</text><rect x="788.0" y="161.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.40"/><text x="887.5" y="213.0" class="ink mid" text-anchor="middle">4,1</text><text x="887.5" y="239.0" class="muted tiny" text-anchor="middle">n = 135</text><text x="152" y="313.0" class="lbl strong" text-anchor="end">2 dias</text><rect x="173.0" y="259.0" width="199.0" height="92.0" fill="var(--pro)" opacity="0.52"/><text x="272.5" y="311.0" class="on-color mid" text-anchor="middle">7,6</text><text x="272.5" y="337.0" class="on-color tiny" text-anchor="middle">n = 23 *</text><rect x="378.0" y="259.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.16"/><text x="477.5" y="311.0" class="ink mid" text-anchor="middle">5,5</text><text x="477.5" y="337.0" class="muted tiny" text-anchor="middle">n = 187</text><rect x="583.0" y="259.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.35"/><text x="682.5" y="311.0" class="ink mid" text-anchor="middle">4,4</text><text x="682.5" y="337.0" class="muted tiny" text-anchor="middle">n = 305</text><rect x="788.0" y="259.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.58"/><text x="887.5" y="311.0" class="on-color mid" text-anchor="middle">3,1</text><text x="887.5" y="337.0" class="on-color tiny" text-anchor="middle">n = 131</text><text x="152" y="411.0" class="lbl strong" text-anchor="end">3 dias</text><rect x="173.0" y="357.0" width="199.0" height="92.0" fill="var(--pro)" opacity="0.32"/><text x="272.5" y="409.0" class="ink mid" text-anchor="middle">6,8</text><text x="272.5" y="435.0" class="muted tiny" text-anchor="middle">n = 9 *</text><rect x="378.0" y="357.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.36"/><text x="477.5" y="409.0" class="ink mid" text-anchor="middle">4,3</text><text x="477.5" y="435.0" class="muted tiny" text-anchor="middle">n = 161</text><rect x="583.0" y="357.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.52"/><text x="682.5" y="409.0" class="on-color mid" text-anchor="middle">3,4</text><text x="682.5" y="435.0" class="on-color tiny" text-anchor="middle">n = 240</text><rect x="788.0" y="357.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.76"/><text x="887.5" y="409.0" class="on-color mid" text-anchor="middle">2,0</text><text x="887.5" y="435.0" class="on-color tiny" text-anchor="middle">n = 115</text><text x="152" y="509.0" class="lbl strong" text-anchor="end">4+ dias</text><rect x="173.0" y="455.0" width="199.0" height="92.0" fill="var(--pro)" opacity="0.32"/><text x="272.5" y="507.0" class="ink mid" text-anchor="middle">6,9</text><text x="272.5" y="533.0" class="muted tiny" text-anchor="middle">n = 5 *</text><rect x="378.0" y="455.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.66"/><text x="477.5" y="507.0" class="on-color mid" text-anchor="middle">2,6</text><text x="477.5" y="533.0" class="on-color tiny" text-anchor="middle">n = 117</text><rect x="583.0" y="455.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.77"/><text x="682.5" y="507.0" class="on-color mid" text-anchor="middle">2,0</text><text x="682.5" y="533.0" class="on-color tiny" text-anchor="middle">n = 199</text><rect x="788.0" y="455.0" width="199.0" height="92.0" fill="var(--det)" opacity="0.88"/><text x="887.5" y="507.0" class="on-color mid" text-anchor="middle">1,3</text><text x="887.5" y="533.0" class="on-color tiny" text-anchor="middle">n = 116</text></svg>
+  </div>
+</div><footer><span>Combinação</span><span>10 / 16</span></footer></section><section class="slide " aria-label="Slide 11 de 16: Quem é o cliente">
+<h2>Quem o cliente é não muda a nota. O que acontece com o pedido dele, sim.</h2>
+<p class="body">Distância entre o NPS do melhor e do pior grupo em cada recorte.</p>
+<svg viewBox="0 0 1360 470" width="100%" role="img" aria-label="Amplitude do NPS por perfil e por situação do pedido" xmlns="http://www.w3.org/2000/svg"><line x1="300.0" x2="300.0" y1="40" y2="420" class="grid"/><text x="300.0" y="454" class="tick" text-anchor="middle">−100</text><line x1="504.0" x2="504.0" y1="40" y2="420" class="grid"/><text x="504.0" y="454" class="tick" text-anchor="middle">−80</text><line x1="708.0" x2="708.0" y1="40" y2="420" class="grid"/><text x="708.0" y="454" class="tick" text-anchor="middle">−60</text><line x1="912.0" x2="912.0" y1="40" y2="420" class="grid"/><text x="912.0" y="454" class="tick" text-anchor="middle">−40</text><line x1="1116.0" x2="1116.0" y1="40" y2="420" class="grid"/><text x="1116.0" y="454" class="tick" text-anchor="middle">−20</text><line x1="1320.0" x2="1320.0" y1="40" y2="420" class="grid"/><text x="1320.0" y="454" class="tick" text-anchor="middle">0</text><text x="276" y="88.8" class="lbl" text-anchor="end">Região</text><line x1="487.7" x2="516.2" y1="80.8" y2="80.8" class="range-off"/><circle cx="487.7" cy="80.8" r="10" class="range-off-dot"/><circle cx="516.2" cy="80.8" r="10" class="range-off-dot"/><text x="536.2" y="87.8" class="val-sm muted">3 pts</text><text x="276" y="150.5" class="lbl" text-anchor="end">Faixa de idade</text><line x1="447.9" x2="557.0" y1="142.5" y2="142.5" class="range-off"/><circle cx="447.9" cy="142.5" r="10" class="range-off-dot"/><circle cx="557.0" cy="142.5" r="10" class="range-off-dot"/><text x="577.0" y="149.5" class="val-sm muted">11 pts</text><text x="276" y="212.2" class="lbl" text-anchor="end">Tempo de casa</text><line x1="470.3" x2="524.4" y1="204.2" y2="204.2" class="range-off"/><circle cx="470.3" cy="204.2" r="10" class="range-off-dot"/><circle cx="524.4" cy="204.2" r="10" class="range-off-dot"/><text x="544.4" y="211.2" class="val-sm muted">5 pts</text><text x="276" y="273.8" class="lbl" text-anchor="end">Valor do pedido</text><line x1="461.2" x2="544.8" y1="265.8" y2="265.8" class="range-off"/><circle cx="461.2" cy="265.8" r="10" class="range-off-dot"/><circle cx="544.8" cy="265.8" r="10" class="range-off-dot"/><text x="564.8" y="272.8" class="val-sm muted">8 pts</text><text x="276" y="335.5" class="lbl strong" text-anchor="end">Dias de atraso</text><line x1="305.1" x2="977.3" y1="327.5" y2="327.5" class="range-key"/><circle cx="305.1" cy="327.5" r="10" class="range-key-dot"/><circle cx="977.3" cy="327.5" r="10" class="range-key-dot"/><text x="997.3" y="334.5" class="val-sm">66 pts</text><text x="276" y="397.2" class="lbl strong" text-anchor="end">Reclamações</text><line x1="327.5" x2="1278.2" y1="389.2" y2="389.2" class="range-key"/><circle cx="327.5" cy="389.2" r="10" class="range-key-dot"/><circle cx="1278.2" cy="389.2" r="10" class="range-key-dot"/><text x="1298.2" y="396.2" class="val-sm">93 pts</text></svg>
+<p class="foot-note">Promotor típico: 0,7 dia de atraso e 2,3 reclamações. Detrator típico: 2,4 dias e 4,4 reclamações. Idade, região, tempo de casa e valor do pedido são iguais nos dois grupos.</p><footer><span>Quem é o cliente</span><span>11 / 16</span></footer></section><section class="slide " aria-label="Slide 12 de 16: O que gera detratores">
+<h2>90% dos detratores passaram por um de dois sinais que já medimos antes da pesquisa.</h2>
+<div class="cols-2 triggers">
+  <div class="trigger"><span class="num det-text">2+ dias</span><span>de atraso na entrega</span></div>
+  <div class="trigger"><span class="num det-text">4+</span><span>reclamações registradas</span></div>
+</div>
+<p class="body">Composição dos detratores.</p>
+<svg viewBox="0 0 1360 150" width="100%" role="img" aria-label="Composição dos detratores" xmlns="http://www.w3.org/2000/svg"><rect x="0.0" y="0" width="692.2" height="96" fill="var(--det-deep)"/><text x="18.0" y="60" class="on-color mid">51%</text><rect x="695.2" y="0" width="276.2" height="96" fill="var(--det)"/><text x="713.2" y="60" class="on-color mid">21%</text><rect x="974.4" y="0" width="251.7" height="96" fill="var(--neu)"/><text x="992.4" y="60" class="on-color mid">19%</text><rect x="1229.1" y="0" width="127.9" height="96" fill="var(--quiet)"/><text x="1247.1" y="60" class="ink mid">10%</text></svg>
+<div class="legend"><span class="k c0">Atraso de 2+ dias e 4+ reclamações</span><span class="k c1">Só atraso de 2+ dias</span><span class="k c2">Só 4+ reclamações</span><span class="k c3">Nenhuma das duas</span></div><footer><span>O que gera detratores</span><span>12 / 16</span></footer></section><section class="slide " aria-label="Slide 13 de 16: Recomendações">
+<h2>Cinco ações, em ordem de prioridade.</h2>
+<ol class="actions">
+  <li><b>Prometer o que dá para cumprir.</b><span>Recalibrar o prazo do checkout por rota e transportadora, com margem de segurança.</span><em>Logística e Produto</em></li>
+  <li><b>Avisar antes de o cliente perguntar.</b><span>Alerta automático no 1º dia de atraso, com nova data e canal direto.</span><em>Atendimento e CRM</em></li>
+  <li><b>Torre de controle de pedidos em risco.</b><span>Fila prioritária quando o pedido atrasa 1 dia, recebe a 2ª reclamação ou o 2º contato.</span><em>Operações</em></li>
+  <li><b>Resolver na primeira vez.</b><span>Meta de resolução no 1º contato e autonomia de compensação para a linha de frente.</span><em>Atendimento</em></li>
+  <li><b>Gerir transportadoras por pontualidade.</b><span>SLA e penalidades atrelados ao prazo cumprido, não só ao custo do frete.</span><em>Logística e Compras</em></li>
+</ol>
+<p class="foot-note">E o que evitar: desconto e parcelamento não compram satisfação. Nesta base, eles não mudam a nota.</p><footer><span>Recomendações</span><span>13 / 16</span></footer></section><section class="slide " aria-label="Slide 14 de 16: Ganho estimado">
+<h2>Cortar só os atrasos extremos ajuda pouco. O salto vem de atacar atraso e reclamações juntos.</h2>
+<p class="body">NPS estimado por cenário, com base no comportamento de pedidos semelhantes.</p>
+<svg viewBox="0 0 1360 430" width="100%" role="img" aria-label="NPS estimado por cenário" xmlns="http://www.w3.org/2000/svg"><line x1="470.0" x2="470.0" y1="0" y2="400" class="grid"/><line x1="636.0" x2="636.0" y1="0" y2="400" class="grid"/><line x1="802.0" x2="802.0" y1="0" y2="400" class="grid"/><line x1="968.0" x2="968.0" y1="0" y2="400" class="grid"/><line x1="1134.0" x2="1134.0" y1="0" y2="400" class="grid"/><line x1="1300.0" x2="1300.0" y1="0" y2="400" class="grid"/><text x="446" y="43.0" class="lbl strong" text-anchor="end">Hoje</text><rect x="470.0" y="15.5" width="166.3" height="43.0" fill="var(--det)"/><text x="650.3" y="43.0" class="val">−80</text><text x="446" y="129.0" class="lbl" text-anchor="end">Atraso máximo de 2 dias</text><rect x="470.0" y="101.5" width="197.6" height="43.0" fill="var(--pro)"/><text x="681.6" y="129.0" class="val">−76  <tspan class="muted">(+4)</tspan></text><text x="446" y="215.0" class="lbl" text-anchor="end">Atraso máximo de 1 dia</text><rect x="470.0" y="187.5" width="282.5" height="43.0" fill="var(--pro)"/><text x="766.5" y="215.0" class="val">−66  <tspan class="muted">(+14)</tspan></text><text x="446" y="301.0" class="lbl" text-anchor="end">Atraso ≤ 1 dia e até 3 reclamações</text><rect x="470.0" y="273.5" width="488.9" height="43.0" fill="var(--pro)"/><text x="972.9" y="301.0" class="val">−41  <tspan class="muted">(+39)</tspan></text><text x="446" y="387.0" class="lbl" text-anchor="end">Todos no prazo e até 3 reclamações</text><rect x="470.0" y="359.5" width="594.4" height="43.0" fill="var(--pro)"/><text x="1078.4" y="387.0" class="val">−28  <tspan class="muted">(+52)</tspan></text></svg>
+<p class="caveat">Ordem de grandeza, não promessa: a simulação usa associações observadas. O efeito real deve ser medido em pilotos com grupo de controle.</p><footer><span>Ganho estimado</span><span>14 / 16</span></footer></section><section class="slide " aria-label="Slide 15 de 16: Limitações">
+<h2>O que esta análise não diz, e os cuidados ao usá‑la.</h2>
+<div class="cols-2 limits">
+  <p><b>Associação não é causa.</b> Os dados mostram o que anda junto com a nota. Antes de escalar, validar cada ação com piloto e grupo de controle.</p>
+  <p><b>Base com sinais de simulação.</b> Relações perfeitas (recompra 0% ou 100%) e notas decimais. Usar a direção dos achados, recalibrar magnitudes com dados reais.</p>
+  <p><b>Lacunas de dados.</b> Sem data do pedido, prazo prometido, transportadora ou categoria de produto. Não vemos sazonalidade nem a origem do atraso.</p>
+  <p><b>44% da variação fica sem explicação.</b> Produto, preço e comunicação não estão na base e podem pesar.</p>
+  <p><b>Inconsistências de cadastro.</b> Ex.: 5% com atraso maior que o prazo total. Testamos: os achados não mudam sem esses registros.</p>
+  <p><b>Risco de manipulação.</b> NPS como meta individual induz pedidos de nota e seleção de quem responde. Usar como indicador de gestão.</p>
+</div><footer><span>Limitações</span><span>15 / 16</span></footer></section><section class="slide " aria-label="Slide 16 de 16: Próximos passos">
+<h2>Da análise à ação em 90 dias.</h2>
+<ol class="timeline">
+  <li><b>Semanas 1 a 2</b><span>Validar definições com os donos dos dados e incluir data do pedido, prazo prometido e transportadora.</span></li>
+  <li><b>Semanas 3 a 10</b><span>Pilotos com grupo de controle: prazo recalibrado em uma praça e aviso proativo de atraso em outra.</span></li>
+  <li><b>Semanas 3 a 12</b><span>Painel semanal com os sinais antecedentes: % no prazo, pedidos com 2+ dias de atraso, 2ª reclamação.</span></li>
+  <li><b>Próxima fase</b><span>Modelo preditivo: para cada pedido em andamento, qual a chance de o cliente virar detrator? Alimenta a torre de controle.</span></li>
+</ol>
+<p class="closing">Entregar no prazo combinado e resolver na primeira vez. É aí que a nota se decide.</p><footer><span>Próximos passos</span><span>16 / 16</span></footer></section></main></div>
+<div class="hint">← → para navegar, F para tela cheia</div>
+<nav class="nav" aria-label="Navegação dos slides"><button id="prev" type="button">Anterior</button><button id="next" type="button">Próximo</button></nav>
+<script>
+(function(){
+  const deck=document.querySelector('.deck');
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.querySelector('.progress');
+  let i=0;
+  function fit(){
+    const s=Math.min(window.innerWidth/1600, window.innerHeight/900);
+    deck.style.transform='scale('+s+')';
+  }
+  function show(n, push){
+    i=Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach((el,k)=>el.classList.toggle('active', k===i));
+    bar.style.width=((i+1)/slides.length*100)+'%';
+    if(push!==false){ history.replaceState(null,'','#slide-'+(i+1)); }
+  }
+  function fromHash(){
+    const m=/^#slide-(\d+)$/.exec(location.hash);
+    show(m? parseInt(m[1],10)-1 : 0, false);
+  }
+  document.addEventListener('keydown', e=>{
+    if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(i+1);}
+    else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(i-1);}
+    else if(e.key==='Home'){show(0);} else if(e.key==='End'){show(slides.length-1);}
+    else if(e.key==='f'||e.key==='F'){
+      if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+      else{document.exitFullscreen&&document.exitFullscreen();}
+    }
+  });
+  document.getElementById('prev').addEventListener('click',()=>show(i-1));
+  document.getElementById('next').addEventListener('click',()=>show(i+1));
+  let x0=null;
+  document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(x0===null)return; const dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50){show(i+(dx<0?1:-1));} x0=null;
+  });
+  window.addEventListener('resize',fit);
+  window.addEventListener('hashchange',fromHash);
+  fit(); fromHash();
+})();
+</script>
+</body>
+</html>
